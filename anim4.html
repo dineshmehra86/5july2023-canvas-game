@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fireworks</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link href="./css/layout.css" rel="stylesheet">
+</head>
+<body>
+    <canvas class="myCanvas"></canvas>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <script>
+        const canvas = document.querySelector(".myCanvas");
+        const ctx = canvas.getContext("2d");
+
+        canvas.width = window.innerWidth - 20;
+        canvas.height = window.innerHeight - 20;
+        // console.log('Rondom number', Math.ceil(Math.random(0,1)*1220));
+        // var xx = 500;
+        // var yy = -160;
+
+        let ch80 = (window.innerHeight - 20) * 0.8;
+        let speed = 2;
+        const gifUrl = "./img/blast1.gif";
+        let gifImage = null;
+        let isRectangleVisible = true;
+        
+        const rectangle = {
+            x: Math.ceil(Math.random() * (canvas.width - 150)),
+            y: 0,
+            width: 150,
+            height: -150,
+        };
+        console.log('I am the rectangle', rectangle);
+        
+        
+        
+        // Function for simulate a key press event code start
+        // function simulateKeyPress(){
+        //     const event = new KeyboardEvent('keydown',{
+        //         keyCode:keyCode,
+        //         bubbles:true,
+        //         cancelable:true,
+        //         shiftKey:false, //Modify if needed
+        //         ctrlKey:false, //Modify if needed
+        //         altKey:false,  //Modify if needed
+        //     });
+        //     document.dispatchEvent(event);
+        // }
+        // Function for simulate a key press event code start
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (isRectangleVisible) {
+                ctx.fillStyle = "#FF0000";
+                ctx.fillRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
+
+                if (rectangle.y <= ch80) {
+                    rectangle.y += speed;
+                } else {
+                    isRectangleVisible = false;
+                    explode(rectangle.x + rectangle.width / 2, ch80 + rectangle.height, gifUrl);
+                    // simulateKeyPress(65);
+                    // console.log('I am simulate', simulateKeyPress(65));
+                }
+            } 
+            else {
+                if (gifImage) {
+                    ctx.drawImage(gifImage, gifImagePosition.x, gifImagePosition.y);
+                }
+                
+            }
+
+            requestAnimationFrame(animate);
+        }
+        animate();
+        
+        let gifImagePosition = {
+            x: Math.ceil(Math.random(0,1)*1200),
+            y: 0,
+        };
+        console.log('I am the gifImagePosition', gifImagePosition);
+
+        function explode(x, y, gifUrl) {
+            const image = new Image();
+            image.onload = function () {
+                gifImage = image;
+                isRectangleVisible = false;
+                gifImagePosition.x = x - image.width / 2;
+                gifImagePosition.y = y - image.height / 2;
+                
+            };
+
+            image.src = gifUrl;
+        }
+        
+        window.addEventListener("keyup", () => {
+            if (!isRectangleVisible) {
+                gifImage = null;
+                gifImagePosition.x = 0;
+                gifImagePosition.y = 0;
+                isRectangleVisible = true;
+                rectangle.y = 0;
+            }
+        });
+        
+        document.addEventListener("keydown", function (event) {
+            var key = String.fromCharCode(event.keyCode);
+            console.log("This is a demo", key);
+            if (isRectangleVisible) {
+                explode(rectangle.x, rectangle.y, gifUrl);
+            }
+        });
+        
+    </script>
+</body>
+</html>

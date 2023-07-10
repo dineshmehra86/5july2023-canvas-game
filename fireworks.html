@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fireworks</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link href="./css/layout.css" rel="stylesheet">
+</head>
+<body>
+    <canvas class="myCanvas"></canvas>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gifler"></script>
+    <script>
+        let canvas = document.querySelector('.myCanvas');
+        // var element = document.getElementById("myelement");
+        // console.log('I am the width---->', window.innerWidth + "px");
+        // canvas.style.width = window.innerWidth + "px";
+        // make dynamic widht
+        
+        canvas.width = window.innerWidth -10;
+        canvas.height = window.innerHeight -10;
+        const ctx = canvas.getContext('2d');
+        const gifUrl = './img/blast1.gif';
+        // Create Image 
+        // const image = new Image();
+        // set the source of the image
+        // image.src = './img/blast1.gif';
+        // wait for the image
+        // image.onload = function() {
+        //     ctx.drawImage(image, 0, 0);
+        // };
+
+        // for gif animation code Start
+        fetch(gifUrl)
+        .then(response => response.arrayBuffer())
+        .then(buffer => {
+            const byteArray = new Uint8Array(buffer);
+            const gif = new Image({
+            workers: 2,
+            quality: 10
+            });
+
+            gif.on('finished', function (blob) {
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(blob);
+            ctx.drawImage(img, 0, 0);
+            });
+
+            gif.on('progress', function (p) {
+            console.log(p);
+            });
+
+            gif.on('error', function (e) {
+            console.error('Error loading GIF:', e);
+            });
+
+            gif.parse(byteArray);
+        })
+        .catch(error => {
+            console.error('Error loading GIF:', error);
+        });
+        // for gif animation code End
+
+        // object.method(actualArgument1, actualArgument2,...)
+        // cbfn = stands for Callback Function
+        // window.addEventListener(event, cbfn); 
+        window.addEventListener('keydown', handleKeyPress);
+        function handleKeyPress(event){
+            console.log('hi');
+        }
+    </script>
+</body>
+</html>

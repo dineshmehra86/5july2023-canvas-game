@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fireworks</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link href="./css/layout.css" rel="stylesheet">
+</head>
+<body>
+    <canvas class="myCanvas"></canvas>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <script>
+        const canvas = document.querySelector(".myCanvas");
+        const ctx = canvas.getContext("2d");
+
+        canvas.width = window.innerWidth - 20;
+        canvas.height = window.innerHeight - 20;
+        // console.log('Rondom number', Math.ceil(Math.random(0,1)*1220));
+        // var xx = 500;
+        // var yy = -160;
+
+        let ch80 = (window.innerHeight - 20) * 0.8;
+        
+        const gifUrl = "./img/blast1.gif";
+        let gifImage = null;
+        let isRectangleVisible = true;
+        console.log('Random', Math.ceil(Math.random(0,1)*1200))
+        
+        // set the initial position of the rectangle
+        var x = 50;
+        var y = -150;
+        // const rectangle = {
+        //     x: Math.ceil(Math.random(0,1)*1200),
+        //     y: 0,
+        //     width: 150,
+        //     height: -150,
+        // };
+
+        // set the animation speed
+        var speed = 2;
+        
+        function draw() {
+            // clear the canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // draw the rectangle
+            ctx.fillStyle = "red";
+            ctx.fillRect(x, y, 150, 150);
+           
+            // update the position of the rectangle
+            if(y <= (ch80-150)){
+                y += speed;
+            }else{
+                // Hide or remove from the canvas
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+            
+            requestAnimationFrame(draw);
+        }
+
+        // Start the animation
+        draw();
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (isRectangleVisible) {
+                ctx.fillStyle = "#FF0000";
+                ctx.fillRect(x, y, 150, 150);
+
+                if (y <= ch80) {
+                    y += speed;
+                } else {
+                    isRectangleVisible = false;
+                    console.log('I am explode', explode(x + width / 2, ch80 + height, gifUrl));
+                    explode(x + width / 2, ch80 + height, gifUrl);
+                }
+            } 
+            else {
+                if (gifImage) {
+                    ctx.drawImage(gifImage, gifImagePosition.x, gifImagePosition.y);
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+        animate();
+        
+        let gifImagePosition = {
+            x: Math.ceil(Math.random(0,1)*1200),
+            y: 0,
+        };
+        console.log('I am the gifImagePosition', gifImagePosition);
+
+        function explode(x, y, gifUrl) {
+            const image = new Image();
+            image.onload = function () {
+                gifImage = image;
+                isRectangleVisible = false;
+                gifImagePosition.x = x - image.width / 2;
+                gifImagePosition.y = y - image.height / 2;
+                
+            };
+
+            image.src = gifUrl;
+        }
+        
+        window.addEventListener("keyup", () => {
+            if (!isRectangleVisible) {
+                gifImage = null;
+                gifImagePosition.x = 0;
+                gifImagePosition.y = 0;
+                isRectangleVisible = true;
+                y = 0;
+            }
+        });
+        
+        
+        window.addEventListener("keydown", (event) => {
+            if (isRectangleVisible) {
+                explode(x, y, gifUrl);
+            }
+        });
+
+        window.addEventListener("keyup", () => {
+            if (!isRectangleVisible) {
+                gifImage = null;
+            }
+        });
+
+        document.addEventListener("keydown", function (event) {
+            var key = String.fromCharCode(event.keyCode);
+            console.log("This is a demo", key);
+            var x = Math.random() * canvas.width;
+            var y = Math.random() * canvas.height;
+            console.log('value of y-->', y);
+            // 2. Function calling
+            explode(600, 400);
+            // drawExplosion();
+        });
+        
+    </script>
+</body>
+</html>

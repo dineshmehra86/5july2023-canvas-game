@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Background Sound</title>
+</head>
+<body>
+    <h1>Welcome to the Page</h1>
+  
+    <button id="playButton">Play Sound</button>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function(event){
+            // Create an AudioContext
+            var audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+            // Load the audio file using an XMLHttpRequest
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', './sound/bg_sound2.mp3', true);
+            xhr.responseType = 'arraybuffer';
+
+            xhr.onload = function() {
+                var audioData = xhr.response;
+
+                audioContext.decodeAudioData(audioData, function(buffer) {
+                    var source = audioContext.createBufferSource();
+                    source.buffer = buffer;
+                    source.loop = true;
+                    source.connect(audioContext.destination);
+
+                    var playButton = document.getElementById('playButton');
+                    playButton.addEventListener('click', function() {
+                        source.start(0);
+                    });
+                });
+            };
+
+            xhr.send();
+        });
+    </script>
+</body>
+</html>

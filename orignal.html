@@ -1,0 +1,622 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Canvas Game</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+
+    <style>
+        .a_tbdr {
+            cursor: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAoCAYAAADt5povAAAAAXNSR0IArs4c6QAABHhJREFUWEdjZMAPWNhYWNpdzXVTQcp2n7w869efP1UMDAx/COjDKc1IQGPlht6yNn97E7CyjQdPMwQUd4MsbKeJhYbqCmfPLe0yQjbcILLs7MXbDyAuIAPg9aGNvtb1w3MbNJDNtU2pv37kwnUtMuwCaxm1cFAFKTcDAwMTAwPDZ1Lik+Q4tEmuuXPx5sP9AU5miazMTEzrD5xe9+Hzt0QGBoYvDAwMfAwMDGwMDAxvcDmCZAtNYisYWrMiGNwtDcBmnrtxn8EquWYGMyPT/1AX81QeTk7mdQdO7nn++kMUNotJtjC4rJdhbVcxigeskmoYSmP9GAIdzcDidx6/YDCJrVz+8ctXkKUogGQLY2snMyxuzkUxJLS8j2FVRxEDI5Jp/kXd7zcdOl1gpKlYIcjDw3/owo21v3//LqeKhdgcEVza819DUZqhJSsS7I6jF28yuGW3zKSZhWEV/QwLG7IZODlAaQgCAkp6viBbKMrAwMDOwMDwjIGB4R9IAbaiDZtvSBEDWSghIyq4PMDJ3IGTnY3h4q0Hb/edujLrz79/LTb6WmfRy1JSDEePa5BeRhFBvg1nFnX4y0uKwL0OCu/I2kkn5EQEJY/Ma5FHTiEUWxjqbPFjVWcRKChRwKkrdxhyu+cxnFzYhiJOsYU2huqPDs9ulsVWMsTUTmZYgpYFkpunM8ytzURRTqwYOEgZGBhSalKCZ1cmBDBwcaB6FJtv/v79x8DMDCpCEYBYMZiFIJ1usuLCjUua8yzsjDThJmGzEFtIECuGbCFID6u0mND+66v7rXm5OcFmYAtSYg3Hpg7dQpCa8PU9pSsCHEwZ/vz9y5DUOJ1hUVMOJXZgJDj0ksZ5fn3WngRfB4YDZ68yXLnzmCEn3IOmFjrMqc3Yn+zvxJDTOZehLjWEQUyIn6YW6nXmRl8si/dniKqZxLCsJY9qloEMwhaH3PG+jh8W1GeynLh8i8FCV42qFkZUT/yNUVtoykmevLp2ohly3UYtW12ymh5iq57Kjs5r6bTSo67vfv76zSDlnroOm4UiIc6WD1Z3FoJaZVQD0H5JItYKmImBoX7n1NpqZ3Pdv1ht/P+fUCcIpg2uziWr+cO+01cUcWlkV5AWO3p0bqu0pAgfpqX/iYlhhKMWbTnEldA4tZKBgWE6PpfKG6gr7N0xueqnmKAAjv4gAZ8yMjJ++PSFSSu46NWL9x+cQS0JQkGjoiIruWZtV+EPXRWFbzgjlBF3p6hmyjK5tgUbQA3lQyD9hCwEqRGSlxTdeXFZ52M+Xm7scQo2CXsw64UWK1659xjUn/xPrIUgde4lMX41nQWxVxgYCYTKP0Qwf/r6nUXEOZnx799/SRipiED6ZzHTVT11fEHzNrC6f8z4QwbqqKPnrwvapTa8YGBgaCTVQgYtRdkjV1f1rEVxGI5ghKnZdOCMhH9J13vkMQFi4hCsX1VWYv+tdZPnY4QEniBetuuYdHTVRFDcwQchiLZQXIh/2Ys9c/sY/vwhWk/P8m0ypf2LFBkYGPpgDgUAS8flzmrpvVgAAAAASUVORK5CYII=), default;
+        }
+    </style>
+</head>
+
+<body>
+
+    <canvas id="myCanvas" class="a_tbdr mx-auto d-block"></canvas>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+        crossorigin="anonymous"></script>
+
+    <script>
+
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+        
+        canvas.width = 1200;
+        canvas.height = 937;
+
+
+
+
+        // Set the initial progress values
+        let progress = 0;
+        const totalProgress = 100;
+
+        // Function to update the progress bar and main screen
+
+        function updateProgressBar() {
+            // Clear the canvas
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.font = "80px Comic Sans MS";
+            ctx.fillText("WELCOME TO GAME", 400, 500);
+
+            // Draw the progress bar background
+            ctx.fillStyle = "#e0e0e0";
+            ctx.fillRect(0, canvas.height - 20, canvas.width, 20);
+
+            // Calculate the progress bar width
+            const progressBarWidth = (progress / totalProgress) * canvas.width;
+
+            // Draw the progress bar
+            ctx.fillStyle = "#42b983";
+            ctx.fillRect(0, canvas.height - 20, progressBarWidth, 20);
+
+            // Check if the progress is complete
+            if (progress >= totalProgress) {
+                // Clear the canvas
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Draw the main screen content
+                ctx.fillStyle = "#f0f0f0";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                // Draw the text on the main screen
+                //  ctx.fillStyle = "#000000";
+                //   ctx.font = "30px Arial";
+                image.src = "./img/3.jpg";
+                //   ctx.fillText("Main Screen", canvas.width / 2 - 80, canvas.height / 2);
+
+
+            }
+        }
+
+        // Start the game and update the progress bar
+        function startGame() {
+            // Simulate the progress increment
+            const increment = 5;
+            const interval = setInterval(() => {
+                // Increase the progress
+                progress += increment;
+
+                // Update the progress bar and main screen
+                updateProgressBar();
+
+                // Check if the progress is complete
+                if (progress >= totalProgress) {
+                    // Game is complete, stop the interval
+                    clearInterval(interval);
+                }
+            }, 50); // Adjust the interval duration as needed
+        }
+
+        // Call the startGame function to begin the game
+        startGame();
+
+
+
+
+        var image = new Image();
+        image.src = "./img/3.jpg"; // Replace with the actual path to your image
+
+        image.onload = function () {
+
+            ctx.drawImage(image, 0, 0);
+
+
+
+        };
+
+        var buttonX = 600; // X position of the button
+        var buttonY = 750; // Y position of the button
+        var buttonWidth = 440; // Width of the button
+        var buttonHeight = 130; // Height of the button
+
+
+        image.onload = function () {
+
+
+
+            ctx.drawImage(image, 0, 0);
+            drawButton();
+
+            // Array of balloon data (position, text, and color)
+            var balloonData = [
+                { x: 115, y: 100, text: "T", color: "#DF0613" }, // Red
+                { x: 245, y: 100, text: "Y", color: "#2CAE25" }, // Green
+                { x: 375, y: 100, text: "P", color: "#9C47ED" }, // Blue
+                { x: 505, y: 100, text: "I", color: "#FFDC00" }, // Blue
+                { x: 635, y: 100, text: "N", color: "#FF8A2D" }, // Blue
+                { x: 765, y: 100, text: "G", color: "#ABD0E9" }, // Blue
+                { x: 55, y: 290, text: "B", color: "#ABD0E9" }, // Blue
+                { x: 185, y: 290, text: "A", color: "#FF8A2D" }, // Blue
+                { x: 315, y: 290, text: "L", color: "#FFDC00" }, // Blue
+                { x: 445, y: 290, text: "L", color: "#9C47ED" }, // Blue
+                { x: 575, y: 290, text: "O", color: "#2CAE25" }, // Blue
+                { x: 705, y: 290, text: "O", color: "#DF0613" }, // Blue
+                { x: 835, y: 290, text: "N", color: "#DD4680" } // Blue
+                // Add more balloons with different colors as needed...
+            ];
+
+            // Draw the balloons
+            for (var i = 0; i < balloonData.length; i++) {
+                var balloon = balloonData[i];
+
+                // Balloon body
+                var radiusX = 50;
+                var radiusY = 60;
+                ctx.beginPath();
+                ctx.ellipse(balloon.x + radiusX, balloon.y + radiusY, radiusX, radiusY, 0, 0, Math.PI * 2);
+                ctx.fillStyle = balloon.color;
+                ctx.fill();
+                ctx.closePath();
+
+                // Balloon string
+                ctx.beginPath();
+                ctx.moveTo(balloon.x + radiusX, balloon.y + radiusY * 2);
+                ctx.lineTo(balloon.x + radiusX, balloon.y + radiusY * 2 + 50);
+                ctx.strokeStyle = "#000000"; // Black color
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                ctx.closePath();
+
+                // Balloon knot
+                ctx.beginPath();
+                ctx.arc(balloon.x + radiusX, balloon.y + radiusY * 2 + 10, 10, 0, Math.PI * 2);
+                ctx.fillStyle = "#000000"; // Black color
+                ctx.fill();
+                ctx.closePath();
+
+                // Text inside balloon
+                ctx.font = "65px Comic Sans MS";
+                ctx.fillStyle = "#ffffff"; // White color
+                ctx.strokeStyle = "#000000"; // Black color
+                ctx.lineWidth = 5;
+
+                var textWidth = ctx.measureText(balloon.text).width;
+                var textX = balloon.x + radiusX - textWidth / 2;
+                var textY = balloon.y + radiusY + 14; // Adjust the vertical position of the text as needed
+
+                ctx.strokeText(balloon.text, textX, textY);
+                ctx.fillText(balloon.text, textX, textY);
+            }
+
+
+
+
+
+
+        };
+
+
+        function drawButton() {
+
+
+
+            ctx.fillStyle = "rgba(240, 240, 240, 0.0)"; // Button background color
+            ctx.fillRect(buttonX, buttonY, buttonWidth, buttonHeight);
+
+            ctx.font = "80px Comic Sans MS";
+            ctx.strokeStyle = "#36ADE8";
+            ctx.lineWidth = 10;
+            ctx.strokeText("StartGame", buttonX + 10, buttonY + buttonHeight / 2 + 6);
+            ctx.fillStyle = "white";
+            ctx.fillText("StartGame", buttonX + 10, buttonY + buttonHeight / 2 + 6);
+        }
+
+
+
+        canvas.addEventListener("click", function (event) {
+            var rect = canvas.getBoundingClientRect();
+            var mouseX = event.clientX - rect.left;
+            var mouseY = event.clientY - rect.top;
+
+            if (
+                mouseX > buttonX &&
+                mouseX < buttonX + buttonWidth &&
+                mouseY > buttonY &&
+                mouseY < buttonY + buttonHeight
+            ) {
+
+
+                /// alert("Button clicked!");
+
+
+                //  ctx.drawImage(image, 0, 0);
+
+                // Create the game over GIF element
+                const gameOverGIF = document.createElement('img');
+                gameOverGIF.src = './gif/1.gif';
+                gameOverGIF.style.position = 'absolute';
+                gameOverGIF.style.top = '50%';
+                gameOverGIF.style.left = '50%';
+                gameOverGIF.style.transform = 'translate(-50%, -50%)';
+                gameOverGIF.style.display = 'none';
+                document.body.appendChild(gameOverGIF);
+
+                // Create the countdown timer element
+                const countdownTimer = document.createElement('div');
+                countdownTimer.textContent = '';
+                countdownTimer.style.position = 'absolute';
+                countdownTimer.style.top = '32px';
+                countdownTimer.style.right = '32px';
+                countdownTimer.style.color = 'white';
+                countdownTimer.style.fontFamily = 'Comic Sans MS';
+                countdownTimer.style.fontSize = '24px';
+                document.body.appendChild(countdownTimer);
+
+                // Get the bounding rectangle of the canvas
+                const canvasRect = canvas.getBoundingClientRect();
+
+                // Adjust the position of the countdown timer
+                countdownTimer.style.top = `${canvasRect.top + 30}px`;
+                countdownTimer.style.right = `${canvasRect.right - 500}px`;
+
+                const balloons = [];
+                const balloonRadius = 50;
+                const balloonSpeed = 2;
+                const blastParticles = [];
+                const blastDuration = 1000; // Blast animation duration in milliseconds
+                let score = 0;
+                let isPaused = false;
+                let animationFrameId = null;
+                let isSoundOn = true;
+
+                // Load the background image
+                const backgroundImage = new Image();
+                backgroundImage.src = './img/3.jpg';
+                backgroundImage.onload = function () {
+                    // Start the game loop after the image has loaded
+                    gameLoop();
+                };
+
+                // Create start/pause button
+                const startPauseButton = document.createElement('button');
+                startPauseButton.textContent = 'Paused';
+                startPauseButton.style.position = 'absolute';
+                startPauseButton.style.top = '32px';
+                startPauseButton.style.fontFamily = 'Comic Sans MS';
+                startPauseButton.style.left = '350px';
+                startPauseButton.style.color = 'white';
+                startPauseButton.style.background = 'Coral';
+                document.body.appendChild(startPauseButton);
+
+                // Create sound button
+                const soundButton = document.createElement('button');
+                soundButton.textContent = 'Sound Off';
+                soundButton.style.position = 'absolute';
+                soundButton.style.top = '32px';
+                soundButton.style.fontFamily = 'Comic Sans MS';
+                soundButton.style.left = '440px';
+                soundButton.style.color = 'white';
+                soundButton.style.background = 'Maroon';
+                document.body.appendChild(soundButton);
+
+                // Set up event listener for the start/pause button
+                startPauseButton.addEventListener('click', toggleGame);
+
+                // Set up event listener for the sound button
+                soundButton.addEventListener('click', toggleSound);
+
+                // Define the keydown event handler
+                function handleKeyDown(event) {
+                    // Check if the key matches the balloon's corresponding letter
+                    const key = event.key.toLowerCase();
+                    const index = balloons.findIndex(
+                        (balloon) => !balloon.isBlasted && balloon.letter === key
+                    );
+                    if (index !== -1) {
+                        burstBalloon(index);
+                        updateScore(10); // Increase the score by 10 for each balloon burst
+                    }
+                }
+
+                // Define a function to create a new balloon
+                function createBalloon() {
+                    const colors = [
+                        'red',
+                        'blue',
+                        'green',
+                        'Coral',
+                        'orange',
+                        'purple',
+                        'Maroon',
+                        'Violet',
+                        'Lime',
+                        'Indigo',
+                    ];
+                    const balloon = {
+                        x: Math.random() * (canvas.width - 2 * balloonRadius) + balloonRadius,
+                        y: canvas.height,
+                        radius: balloonRadius,
+                        color: colors[Math.floor(Math.random() * colors.length)],
+                        letter: getRandomLetter(),
+                        isBlasted: false,
+                    };
+                    balloons.push(balloon);
+                }
+
+                // Define a function to generate a random letter
+                function getRandomLetter() {
+                    const alphabet = 'abcdefghijklmnopqrstuvwxyz';
+                    return alphabet[Math.floor(Math.random() * alphabet.length)];
+                }
+
+                // Define a function to burst a balloon
+                function burstBalloon(index) {
+                    const balloon = balloons[index];
+                    balloon.isBlasted = true;
+
+                    // Create blast particles
+                    const particleCount = 30;
+                    const blastColor = 'orange';
+
+                    for (let i = 0; i < particleCount; i++) {
+                        const angle = Math.random() * Math.PI * 2;
+                        const speed = Math.random() * 4 + 1;
+                        const particle = {
+                            x: balloon.x,
+                            y: balloon.y,
+                            radius: Math.random() * 3 + 1,
+                            color: blastColor,
+                            vx: Math.cos(angle) * speed,
+                            vy: Math.sin(angle) * speed,
+                            alpha: 1,
+                            life: blastDuration,
+                        };
+                        blastParticles.push(particle);
+                    }
+                }
+
+                // Define a function to update the score
+                function updateScore(points) {
+                    score += points;
+                }
+
+                // Define the toggleGame function
+                function toggleGame() {
+                    isPaused = !isPaused;
+                    if (isPaused) {
+                        startPauseButton.textContent = 'Resume';
+                        cancelAnimationFrame(animationFrameId);
+                        backgroundMusic.pause();
+
+
+                    } else {
+                        startPauseButton.textContent = 'Pause';
+                        gameLoop();
+                        backgroundMusic.play();
+
+                    }
+                }
+
+                // Define the toggleSound function
+                function toggleSound() {
+                    isSoundOn = !isSoundOn;
+                    if (isSoundOn) {
+                        soundButton.textContent = 'Sound Off';
+                        playBackgroundMusic();
+                    } else {
+                        soundButton.textContent = 'Sound On';
+                        pauseBackgroundMusic();
+                    }
+                }
+
+                // Define the game loop function
+                function gameLoop() {
+                    // Render the background image
+                    ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+
+                    // Create a new balloon randomly
+                    if (Math.random() < 0.01) {
+                        createBalloon();
+                    }
+
+                    // Update and render all balloons
+                    for (let i = 0; i < balloons.length; i++) {
+                        const balloon = balloons[i];
+
+                        // Move the balloon upwards
+                        balloon.y -= balloonSpeed;
+
+                        // Check if the balloon is out of the canvas or blasted
+                        if (balloon.y + balloon.radius < 0 || balloon.isBlasted) {
+                            balloons.splice(i, 1); // Remove the balloon from the array
+                            i--; // Adjust the index since the array length has decreased
+                            continue;
+                        }
+
+                        // Render the balloon
+                        ctx.fillStyle = balloon.color;
+                        ctx.beginPath();
+                        ctx.arc(balloon.x, balloon.y, balloon.radius, 0, 2 * Math.PI);
+                        ctx.fill();
+
+                        // Render the balloon's letter inside it
+                        ctx.font = '65px Comic Sans MS';
+                        ctx.fillStyle = '#ffffff'; // White color
+                        ctx.lineWidth = 15;
+                        ctx.strokeStyle = '#000000'; // Black color
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        ctx.fillText(balloon.letter.toUpperCase(), balloon.x, balloon.y);
+
+                        // Draw the balloon's tail
+                        ctx.lineWidth = 2;
+                        ctx.strokeStyle = '#000000'; // Black color
+
+                        const tailLength = 50; // Length of the balloon's tail
+                        const tailWidth = 2; // Width of the tail
+
+                        const tailX = balloon.x - tailWidth / 2;
+                        const tailY = balloon.y + balloon.radius - tailLength;
+
+                        const knotRadius = 8; // Radius of the knot
+
+                        ctx.beginPath();
+
+                        // Draw the knot (a round circle)
+                        ctx.fillStyle = '#000000'; // Black color
+                        ctx.arc(tailX, tailY + 55, knotRadius, 0, 2 * Math.PI);
+                        ctx.fill();
+
+                        // Draw the string
+                        ctx.moveTo(tailX, tailY + 95);
+                        ctx.lineTo(tailX, tailY + 50); // Adjust the length of the string as needed
+
+                        ctx.stroke();
+                    }
+
+                    // Update and render blast particles
+                    for (let i = 0; i < blastParticles.length; i++) {
+                        const particle = blastParticles[i];
+
+                        particle.x += particle.vx;
+                        particle.y += particle.vy;
+                        particle.alpha -= 1 / particle.life;
+
+                        if (particle.alpha <= 0) {
+                            blastParticles.splice(i, 1);
+                            i--;
+                            continue;
+                        }
+
+                        ctx.save();
+                        ctx.globalAlpha = particle.alpha;
+                        ctx.fillStyle = particle.color;
+                        ctx.beginPath();
+                        ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.restore();
+
+                        particle.life--;
+                    }
+
+                    // Render the score label
+                    ctx.font = '24px Comic Sans MS';
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillText(`Score: ${score}`, 100, 50);
+
+                    // Call the game loop on the next animation frame
+                    animationFrameId = requestAnimationFrame(gameLoop);
+                }
+
+                // Remove the existing event listener for keydown events
+                document.removeEventListener('keydown', handleKeyDown);
+
+                // Add event listener for keydown events
+                document.addEventListener('keydown', handleKeyDown);
+
+                // Sound functionality
+                const backgroundMusic = new Audio('./sound/2.mp3');
+                backgroundMusic.loop = true;
+
+                function playBackgroundMusic() {
+                    if (isSoundOn && backgroundMusic.paused) {
+                        backgroundMusic.play();
+                    }
+                }
+
+                function pauseBackgroundMusic() {
+                    if (!isSoundOn && !backgroundMusic.paused) {
+                        backgroundMusic.pause();
+                    }
+                }
+
+                // Initial play of the background music
+                playBackgroundMusic();
+
+                // Function to handle game over
+                function gameOver() {
+                    isSoundOn = false;
+                    soundButton.textContent = 'Sound On';
+                    cancelAnimationFrame(animationFrameId);
+                    pauseBackgroundMusic();
+                    gameOverGIF.style.display = 'block';
+                }
+
+                // Start the countdown timer
+                let countdownTime = 2 * 60; // 5 minutes in seconds
+                let remainingTime = countdownTime;
+                let isTimerRunning = true;
+
+                function startCountdown() {
+                    if (remainingTime > 0 && isTimerRunning) {
+                        remainingTime--;
+                        countdownTimer.textContent = formatTime(remainingTime);
+                        setTimeout(startCountdown, 1000); // Start the next countdown after 1 second
+                    } else {
+                        // Countdown complete, stop the game
+                        isSoundOn = false;
+                        soundButton.textContent = 'Sound On';
+                        cancelAnimationFrame(animationFrameId);
+                        pauseBackgroundMusic();
+                        // alert('Game Over!'); // Display a game over message
+                       
+                       
+                    }
+                    if(remainingTime==0){
+                        gameOver();
+
+                    }
+                }
+
+                // Format the remaining time as MM:SS
+                function formatTime(time) {
+                    const minutes = Math.floor(time / 60);
+                    const seconds = time % 60;
+                    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                }
+
+                // Start the countdown
+                startCountdown();
+
+
+                // Function to toggle the state of the timer
+                function toggleTimer() {
+                    isTimerRunning = !isTimerRunning;
+                    if (isTimerRunning) {
+                        startCountdown();
+                       
+                    }
+                }
+
+                // Set up event listener for the start/pause button to toggle the timer
+                startPauseButton.addEventListener('click', toggleTimer);
+
+
+
+
+            }
+
+
+
+
+
+
+
+
+
+
+        });
+
+
+
+
+
+
+
+    </script>
+
+
+</body>
+
+</html>
