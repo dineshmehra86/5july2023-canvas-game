@@ -35,38 +35,32 @@
             x: Math.ceil(Math.random(0,1)*1200),
             y: 0,
         };
-
-        let blastTimeoutId = null;
-
-        // Function for drawing the label
-        function drawLabel() {
-            const labelFont = "32px arial";
-            const labelColor = "black";
-            const labelX = window.innerWidth - 50; 
-            const labelY = window.innerHeight - 40;
-            const labelText = "Score: " + score;
-            const borderWidth = 2;
-            const borderColor = "none";
-
-            ctx.clearRect(labelX - 10, labelY - 40, 50, 50);
-
-            ctx.strokeStyle = borderColor;
-            ctx.lineWidth = borderWidth;
-            ctx.font = labelFont;
-            ctx.textAlign = "right";
-            ctx.textBaseline = "bottom";
-            ctx.strokeText(labelText, labelX, labelY);
-            
-            ctx.fillStyle = labelColor;
-            ctx.fillText(labelText, labelX, labelY);
-        }
+        
 
         // All Variables Section End
         
         // All Function Section Start
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            drawLabel();
+            // Draw text on the canvas
+        const labelFont = "32px arial";
+        const labelColor = "black";
+        const labelX = window.innerWidth - 80; 
+        const labelY = window.innerHeight - 80;
+        const labelText = score;
+        const borderWidth = 2;
+        const borderColor = "none"
+
+        ctx.strokeStyle = borderColor;
+        ctx.lineWidth = borderWidth;
+        ctx.font = labelFont;
+        ctx.textAlign = "right",
+        ctx.textBaseline = "bottom"
+        ctx.strokeText(labelText, labelX, labelY);
+        
+        ctx.fillStyle = labelColor;
+        ctx.fillText("Score: " +score, labelX, labelY);
+            
             if (isRectangleVisible) {
                 ctx.fillStyle = "#FF0000";
                 ctx.fillRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
@@ -94,13 +88,6 @@
                 isRectangleVisible = false;
                 gifImagePosition.x = x - image.width / 2;
                 gifImagePosition.y = y - image.height / 2;
-                
-                // Clear the blast image after 2 seconds
-                blastTimeoutId = setTimeout(() => {
-                    gifImage = null;
-                    clearTimeout(blastTimeoutId);
-                }, 500);
-
             };
             image.src = gifUrl;
         }
@@ -122,14 +109,12 @@
             const eventType = 'keypress';
             triggerKeyPress(eventType, keyCode);
         }
-        let b = () => {
-            console.log("monster random box")
-        }
+        
         // All Function Section End
 
         // All Function calling or invoking section Start
         animate();
-        setTimeout(blastTime, 4690);
+        setTimeout(blastTime, 4000);
 
         // All Function calling or invoking scetion End
         
@@ -153,11 +138,6 @@
             }
         });
         // All Function calling or invoking scetion End
-
-
-        setInterval(b, Math.floor(Math.random() * (2000 - 1000 + 1)) + 1000);
-        // const randomNumber = Math.floor(Math.random() * (2000 - 1000 + 1)) + 1000;
-        console.log(b);
         </script>
 </body>
 </html>
